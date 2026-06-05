@@ -1,10 +1,10 @@
 "use client";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import confetti from 'canvas-confetti'; // อย่าลืมลง npm install canvas-confetti นะบักณฐ
+import confetti from 'canvas-confetti';
 
 const CARD_IMAGES = [
-    "/images/couple1.jpg", // เช็กว่าชื่อไฟล์ในโฟลเดอร์ public/images เป็นชื่อนี้จริงมั้ย
+    "/images/couple1.jpg",
     "/images/couple2.jpg",
     "/images/couple3.jpg",
     "/images/couple4.jpg",
@@ -12,7 +12,8 @@ const CARD_IMAGES = [
     "/images/couple6.jpg",
 ];
 
-export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => void, onFinish: () => void }) {    const [cards, setCards] = useState(() =>
+export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => void, onFinish: () => void }) {
+    const [cards, setCards] = useState(() =>
         [...CARD_IMAGES, ...CARD_IMAGES]
             .sort(() => Math.random() - 0.5)
             .map((img, index) => ({ id: index, img, flipped: false, matched: false }))
@@ -30,7 +31,6 @@ export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => v
         "จุ๊บเหม่ง 1 ที 😘", "ซื้อลิปสติกใหม่ 💄", "พาไปเที่ยวทะเล 🌊", "งดดื้อ 1 อาทิตย์ 🙏"
     ];
 
-    // --- เอฟเฟกต์พลุฉลองตอนชนะ ---
     const fireConfetti = () => {
         const duration = 3 * 1000;
         const end = Date.now() + duration;
@@ -41,14 +41,14 @@ export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => v
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
-                colors: ['#fdfcf0', '#7a1212', '#ff0000']
+                colors: ['#fff8fb', '#e8789a', '#f4a7be']
             });
             confetti({
                 particleCount: 3,
                 angle: 120,
                 spread: 55,
                 origin: { x: 1 },
-                colors: ['#fdfcf0', '#7a1212', '#ff0000']
+                colors: ['#fff8fb', '#e8789a', '#f4a7be']
             });
 
             if (Date.now() < end) {
@@ -86,7 +86,7 @@ export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => v
     useEffect(() => {
         if (cards.length > 0 && cards.every(card => card.matched)) {
             setIsWon(true);
-            fireConfetti(); // เรียกใช้พลุทันทีที่ชนะ
+            fireConfetti();
         }
     }, [cards]);
 
@@ -99,13 +99,13 @@ export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => v
             const index = Math.floor((360 - (newRotation % 360)) / (360 / GIFTS.length)) % GIFTS.length;
             setResult(GIFTS[index]);
             setIsSpinning(false);
-            fireConfetti(); // ยิงพลุอีกรอบตอนได้ของรางวัล!
+            fireConfetti();
         }, 4000);
     };
 
     return (
-        <section className="min-h-screen w-full bg-[#7a1212] flex flex-col items-center justify-center p-6 font-mono text-[#fdfcf0] relative z-50 overflow-hidden">
-            <button onClick={onBack} className="absolute top-6 left-6 z-[60] text-[10px] uppercase tracking-widest opacity-40 hover:opacity-100 p-2">
+        <section className="min-h-screen w-full bg-[#fce4ec] flex flex-col items-center justify-center p-6 font-sans text-[#c2547a] relative z-50 overflow-hidden">
+            <button onClick={onBack} className="absolute top-6 left-6 z-[60] text-[10px] uppercase tracking-widest text-[#c2547a]/40 hover:text-[#c2547a] p-2">
                 ← Back
             </button>
 
@@ -113,7 +113,7 @@ export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => v
                 <div className="max-w-md w-full flex flex-col items-center z-50">
                     <motion.h2
                         animate={isWon ? { scale: [1, 1.1, 1], rotate: [-2, 2, -2] } : {}}
-                        className="text-4xl font-black uppercase italic mb-8 tracking-tighter"
+                        className="text-4xl font-black uppercase italic mb-8 tracking-tighter text-[#c2547a]"
                     >
                         {isWon ? "✨ YOU DID IT! ✨" : "Memory Quest"}
                     </motion.h2>
@@ -125,8 +125,8 @@ export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => v
                         {cards.map((card) => (
                             <div key={card.id} onClick={() => handleCardClick(card.id)} className="aspect-square cursor-pointer relative z-50" style={{ perspective: '1000px' }}>
                                 <motion.div animate={{ rotateY: card.flipped || card.matched ? 180 : 0 }} transition={{ duration: 0.4 }} className="w-full h-full relative" style={{ transformStyle: 'preserve-3d' }}>
-                                    <div className="absolute inset-0 bg-[#fdfcf0]/20 border border-[#fdfcf0]/30 rounded-xl flex items-center justify-center text-3xl font-black shadow-inner" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>?</div>
-                                    <div className="absolute inset-0 bg-[#fdfcf0] rounded-xl overflow-hidden shadow-2xl" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
+                                    <div className="absolute inset-0 bg-[#fff8fb] border border-[#f4a7be]/50 rounded-xl flex items-center justify-center text-3xl font-black text-[#e8789a] shadow-inner" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>?</div>
+                                    <div className="absolute inset-0 bg-[#fff8fb] rounded-xl overflow-hidden shadow-2xl" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
                                         <img src={card.img} alt="couple" className="w-full h-full object-cover" />
                                     </div>
                                 </motion.div>
@@ -144,15 +144,15 @@ export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => v
                                 <motion.p
                                     animate={{ opacity: [0, 1, 0] }}
                                     transition={{ repeat: Infinity, duration: 1.5 }}
-                                    className="mt-6 text-xs font-black uppercase tracking-[0.4em] text-yellow-400"
+                                    className="mt-6 text-xs font-black uppercase tracking-[0.4em] text-[#e8789a]"
                                 >
                                     Master of Memory!
                                 </motion.p>
                                 <motion.button
-                                    whileHover={{ scale: 1.1, boxShadow: "0_0_40px_rgba(253,252,240,0.6)" }}
+                                    whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={() => setShowWheel(true)}
-                                    className="mt-8 bg-[#fdfcf0] text-[#7a1212] px-12 py-5 rounded-full font-black uppercase shadow-[0_10px_40px_rgba(0,0,0,0.4)] z-[70] text-lg"
+                                    className="mt-8 bg-[#e8789a] text-white px-12 py-5 rounded-full font-black uppercase shadow-[0_10px_40px_rgba(232,120,154,0.4)] z-[70] text-lg"
                                 >
                                     Go to Lucky Wheel 🎡
                                 </motion.button>
@@ -161,66 +161,134 @@ export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => v
                     </AnimatePresence>
                 </div>
             ) : (
-                <div className="flex flex-col items-center z-50">
-                    {/* ส่วนวงล้อเหมือนเดิม... */}
-                    <h2 className="text-4xl font-black italic uppercase mb-10">Lucky Wheel</h2>
+                <div className="flex flex-col items-center z-50 w-full max-w-sm px-4">
+                    <h2 className="text-4xl font-black italic uppercase mb-8 text-[#c2547a]">Lucky Wheel</h2>
+
                     <div className="relative w-72 h-72 md:w-80 md:h-80">
-                        <div className="absolute top-[-15px] left-1/2 -translate-x-1/2 z-[100] text-[#fdfcf0] text-4xl drop-shadow-lg">▼</div>
-                        <motion.div animate={{ rotate: rotation }} transition={{ duration: 4, ease: [0.45, 0.05, 0.55, 0.95] }} className="w-full h-full rounded-full border-4 border-[#fdfcf0] relative overflow-hidden bg-[#fdfcf0] shadow-2xl">
-                            {GIFTS.map((gift, i) => (
-                                <div key={i} className="absolute top-0 left-1/2 w-1/2 h-full origin-left flex items-center justify-end pr-2 border-l border-[#7a1212]/5" style={{ transform: `rotate(${(360 / GIFTS.length) * i}deg)`, backgroundColor: i % 2 === 0 ? '#fdfcf0' : '#f8f4e1' }}>
-                                    <span className="text-[#7a1212] font-black text-[9px] rotate-[-90deg] translate-x-3 w-20 text-center uppercase">{gift}</span>
-                                </div>
-                            ))}
-                        </motion.div>
-                        <div className="absolute inset-0 m-auto w-8 h-8 bg-[#7a1212] rounded-full border-2 border-[#fdfcf0] z-20" />
+                        {/* ลูกศรชี้ */}
+                        <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-[100] drop-shadow-lg">
+                            <svg viewBox="0 0 28 28" className="w-7 h-7">
+                                <polygon points="14,28 0,4 28,4" fill="#c2547a" />
+                                <polygon points="14,24 3,6 25,6" fill="#e8789a" />
+                            </svg>
+                        </div>
+
+                        <motion.svg
+                            viewBox="0 0 200 200"
+                            className="w-full h-full drop-shadow-2xl"
+                            animate={{ rotate: rotation }}
+                            transition={{ duration: 4, ease: [0.45, 0.05, 0.55, 0.95] }}
+                            style={{ transformOrigin: 'center' }}
+                        >
+                            {/* พื้นหลัง */}
+                            <circle cx="100" cy="100" r="98" fill="#fff8fb" stroke="#e8789a" strokeWidth="3" />
+
+                            {GIFTS.map((gift, i) => {
+                                const total = GIFTS.length;
+                                const angleDeg = 360 / total;
+                                const startDeg = angleDeg * i - 90;
+                                const endDeg   = angleDeg * (i + 1) - 90;
+                                const s = startDeg * Math.PI / 180;
+                                const e = endDeg   * Math.PI / 180;
+                                const r = 96, cx = 100, cy = 100;
+                                const x1 = cx + r * Math.cos(s);
+                                const y1 = cy + r * Math.sin(s);
+                                const x2 = cx + r * Math.cos(e);
+                                const y2 = cy + r * Math.sin(e);
+
+                                const colors = ['#fff0f8','#ffd6e7','#fff8fb','#fce4ec'];
+                                const fill = colors[i % colors.length];
+
+                                // กึ่งกลาง wedge
+                                const midDeg = startDeg + angleDeg / 2;
+                                const midRad = midDeg * Math.PI / 180;
+
+                                // emoji ที่ r=62 กลาง wedge
+                                const er = 62;
+                                const ex = cx + er * Math.cos(midRad);
+                                const ey = cy + er * Math.sin(midRad);
+
+                                const emojiMatch = gift.match(/\p{Emoji_Presentation}/u);
+                                const emoji = emojiMatch ? emojiMatch[0] : '';
+
+                                return (
+                                    <g key={i}>
+                                        {/* wedge */}
+                                        <path
+                                            d={`M ${cx},${cy} L ${x1},${y1} A ${r},${r} 0 0,1 ${x2},${y2} Z`}
+                                            fill={fill}
+                                            stroke="#f4a7be"
+                                            strokeWidth="1.5"
+                                        />
+                                        {/* emoji อย่างเดียว */}
+                                        <text x={ex} y={ey} textAnchor="middle" dominantBaseline="middle" fontSize="16">
+                                            {emoji}
+                                        </text>
+                                    </g>
+                                );
+                            })}
+
+                            {/* วงขอบนอก */}
+                            <circle cx="100" cy="100" r="96" fill="none" stroke="#e8789a" strokeWidth="2" />
+                            {/* วงกลมกลาง */}
+                            <circle cx="100" cy="100" r="14" fill="#e8789a" stroke="#fff8fb" strokeWidth="3" />
+                            <text x="100" y="100" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="white">♥</text>
+                        </motion.svg>
                     </div>
-                    <button onClick={spinWheel} disabled={isSpinning} className={`mt-12 px-12 py-4 rounded-full font-black uppercase transition-all shadow-2xl ${isSpinning ? 'opacity-30' : 'bg-[#fdfcf0] text-[#7a1212] hover:scale-110'}`}>
-                        {isSpinning ? 'Good Luck...' : 'Spin Now!'}
-                    </button>
+
+                    <motion.button
+                        whileHover={{ scale: 1.08 }}
+                        whileTap={{ scale: 0.92 }}
+                        onClick={spinWheel}
+                        disabled={isSpinning}
+                        className={`mt-10 px-14 py-4 rounded-full font-black uppercase tracking-widest transition-all shadow-[0_8px_30px_rgba(232,120,154,0.4)] text-sm ${
+                            isSpinning
+                                ? 'bg-[#f4a7be] text-white opacity-50 cursor-not-allowed'
+                                : 'bg-[#e8789a] text-white hover:bg-[#c2547a]'
+                        }`}
+                    >
+                        {isSpinning ? '🍀 Good Luck...' : '✨ Spin Now!'}
+                    </motion.button>
                 </div>
             )}
 
-            {/* Result Modal - ค้นหาคำนี้ในไฟล์นายนะ */}
-<AnimatePresence>
-  {result && (
-    <motion.div 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-[#7a1212]/95 p-6 backdrop-blur-xl"
-    >
-      <motion.div 
-        initial={{ scale: 0.5, rotate: -10 }}
-        animate={{ scale: 1, rotate: 0 }}
-        className="bg-[#fdfcf0] p-12 rounded-[40px] text-center max-w-sm shadow-[0_20px_80px_rgba(0,0,0,0.5)] border-8 border-[#5a0d0d]"
-      >
-        <motion.span 
-          animate={{ y: [0, -20, 0] }}
-          transition={{ repeat: Infinity, duration: 1 }}
-          className="text-7xl block mb-6"
-        >
-          🎁
-        </motion.span>
-        <p className="text-[#7a1212]/60 text-xs font-bold uppercase tracking-[0.2em] mb-2">Congratulations!</p>
-        <h3 className="text-[#7a1212] font-black text-4xl uppercase italic mb-6 leading-tight">{result}</h3>
-        <div className="w-full h-px bg-[#7a1212]/10 mb-8" />
-        
-        {/* --- วางปุ่มที่พี่แก้ให้ ตรงนี้เลย! --- */}
-        <button 
-          onClick={() => {
-            setResult(null); // ปิด Pop-up
-            onFinish();      // วาร์ปไปหน้าจดหมาย (LetterSection)
-          }} 
-          className="w-full py-4 bg-[#7a1212] text-[#fdfcf0] font-black rounded-2xl hover:bg-black transition-colors uppercase tracking-widest"
-        >
-          Keep it Forever
-        </button>
-        {/* ---------------------------------- */}
-        
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
+            {/* Result Modal */}
+            <AnimatePresence>
+              {result && (
+                <motion.div 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }} 
+                  className="fixed inset-0 z-[200] flex items-center justify-center bg-[#fce4ec]/95 p-6 backdrop-blur-xl"
+                >
+                  <motion.div 
+                    initial={{ scale: 0.5, rotate: -10 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    className="bg-[#fff8fb] p-12 rounded-[40px] text-center max-w-sm shadow-[0_20px_80px_rgba(232,120,154,0.3)] border-8 border-[#f4a7be]"
+                  >
+                    <motion.span 
+                      animate={{ y: [0, -20, 0] }}
+                      transition={{ repeat: Infinity, duration: 1 }}
+                      className="text-7xl block mb-6"
+                    >
+                      🎁
+                    </motion.span>
+                    <p className="text-[#e8789a]/60 text-xs font-bold uppercase tracking-[0.2em] mb-2">Congratulations!</p>
+                    <h3 className="text-[#c2547a] font-black text-4xl uppercase italic mb-6 leading-tight">{result}</h3>
+                    <div className="w-full h-px bg-[#e8789a]/10 mb-8" />
+                    
+                    <button 
+                      onClick={() => {
+                        setResult(null);
+                        onFinish();
+                      }} 
+                      className="w-full py-4 bg-[#e8789a] text-white font-black rounded-2xl hover:bg-[#c2547a] transition-colors uppercase tracking-widest"
+                    >
+                      Keep it Forever
+                    </button>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
         </section>
     );
 }

@@ -7,14 +7,13 @@ import TransitionPage from '../src/components/TransitionPage';
 import GoPlanSection from '../src/components/GoPlanSection';
 import GiftQuestSection from '../src/components/GiftQuestSection';
 import LetterSection from '../src/components/LetterSection';
-import MusicCassetteSection from '../src/components/MusicCassetteSection'; // 1. Import หน้าเทปเพลงเพิ่ม
+import MusicCassetteSection from '../src/components/MusicCassetteSection';
 
 export default function Home() {
-  // 2. เพิ่ม Step 'music' เข้าไปเป็นลำดับสุดท้าย
   const [currentStep, setCurrentStep] = useState<'lobby' | 'anniversary' | 'gallery' | 'transition' | 'goplan' | 'quest' | 'letter' | 'music'>('lobby');
 
   return (
-    <main className="min-h-screen bg-[#7a1212]">
+    <main className="min-h-screen bg-[#fce4ec]">
       
       {/* 1. หน้าแมว (Lobby) */}
       {currentStep === 'lobby' && (
@@ -31,7 +30,7 @@ export default function Home() {
         <GallerySection onNext={() => setCurrentStep('transition')} /> 
       )}
 
-      {/* 4. หน้าอนิเมชั่นคั่นเวลา (Transition รถวิ่งสีแดง) */}
+      {/* 4. หน้าอนิเมชั่นคั่นเวลา (Transition) */}
       {currentStep === 'transition' && (
         <TransitionPage onComplete={() => setCurrentStep('goplan')} />
       )}
@@ -46,9 +45,8 @@ export default function Home() {
         <GiftQuestSection onBack={() => setCurrentStep('goplan')} onFinish={() => setCurrentStep('letter')} />
       )}
 
-      {/* 7. หน้าจดหมายความในใจ (Letter) */}
+      {/* 7. หน้าจดหมาย (Letter) */}
       {currentStep === 'letter' && (
-        // 3. ส่ง prop onNext ไปเพื่อให้กดปิดจดหมายแล้วไปหน้าเพลงต่อ
         <LetterSection onNext={() => setCurrentStep('music')} />
       )}
 

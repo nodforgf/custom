@@ -2,200 +2,278 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
-// --- 1. Component ย่อยสำหรับแผ่นโน้ตสัญญา (Promises) ---
-function PromiseNote({ promise, toggle, idx }: any) {
-  // สุ่มมุมเอียงให้ดูเหมือนแปะกระดาษจริงบนผนัง
-  const rotations = [-2, 1.5, -1, 3, -3, 2];
-  const rotation = rotations[idx % rotations.length];
+// --- ความปรารถนา preset ทั้งหมด ---
+const WISHES = [
+  { id: 1,  text: "พาไปดูซากุระที่ญี่ปุ่น 🌸",                color: "#ffd6e7" },
+  { id: 2,  text: "ไปกินหมูกระทะร้านโปรดด้วยกัน 🥩", color: "#fce4ec" },
+  { id: 3,  text: "นั่งดูพระอาทิตย์ตกที่ทะเลสองคน 🌅",        color: "#fff0f8" },
+  { id: 4,  text: "ซื้อบ้านที่มีสวนดอกไม้ให้เธอ 🏡",           color: "#ffd6e7" },
+  { id: 5,  text: "ไปเที่ยวเกาหลีด้วยกันสักครั้ง ✈️",          color: "#fce4ec" },
+  { id: 6,  text: "นอนดูหนังที่บ้านทั้งวัน 🎬",  color: "#fff0f8" },
+  { id: 7,  text: "ขับรถเที่ยวต่างจังหวัดแบบไม่มีแผน 🚗",          color: "#ffd6e7" },
+  { id: 8,  text: "ปลูกต้นไม้ด้วยกันในสวนของเราเอง 🌿",         color: "#fce4ec" },
+  { id: 9,  text: "เรียนทำอาหารด้วยกันในวันหยุด 🍳",            color: "#fff0f8" },
+  { id: 10, text: "ไปดูดาวตอนกลางคืน🌟",            color: "#ffd6e7" },
+];
 
-  return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.9, rotate: 0 }}
-      animate={{ opacity: 1, scale: 1, rotate: rotation }}
-      whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
-      onClick={() => toggle(promise.id)}
-      className={`relative cursor-pointer p-6 shadow-2xl transition-all duration-500 ${
-        promise.achieved 
-        ? 'bg-white text-[#7a1212] shadow-black/10' 
-        : 'bg-[#fdfcf0] text-[#7a1212] shadow-black/30'
-      }`}
-      style={{
-        width: '100%',
-        maxWidth: '280px',
-        minHeight: '220px',
-        aspectRatio: '1/1',
-        // ทำมุมพับกระดาษเล็กๆ ที่มุมล่างขวา
-        clipPath: 'polygon(0% 0%, 100% 0%, 100% 90%, 90% 100%, 0% 100%)',
-      }}
-    >
-      {/* รอยเทปใสแปะหัวกระดาษ */}
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-14 h-7 bg-white/30 backdrop-blur-[1px] rotate-[-2deg] z-10 border-x border-white/10" />
+// ตำแหน่งกระดาษในโหล (x, y, rotate) — อยู่ใน viewBox 300x360
+const SCROLL_POSITIONS = [
+  { x: 80,  y: 130, r: -18 },
+  { x: 155, y: 115, r:  10 },
+  { x: 225, y: 125, r: -8  },
+  { x: 70,  y: 190, r:  12 },
+  { x: 148, y: 182, r: -14 },
+  { x: 220, y: 188, r:  16 },
+  { x: 88,  y: 255, r: -10 },
+  { x: 155, y: 248, r:   8 },
+  { x: 222, y: 258, r: -16 },
+  { x: 148, y: 310, r:   6 },
+];
 
-      <div className="flex flex-col h-full justify-between relative z-0">
-        <div className="space-y-3">
-          <div className="flex justify-between items-start">
-            <span className="text-[9px] font-bold uppercase tracking-[0.2em] opacity-40">
-              {promise.achieved ? '✓ Achieved' : '○ Future Promise'}
-            </span>
-            <span className="text-xs opacity-20 italic">#{idx + 1}</span>
-          </div>
-          
-          <h3 className={`text-xl md:text-2xl font-black leading-tight italic transition-all duration-500 ${
-            promise.achieved ? 'line-through opacity-20' : 'opacity-100'
-          }`}>
-            {promise.task}
-          </h3>
-        </div>
-
-        <div className="flex justify-end">
-          <motion.span 
-            animate={promise.achieved ? { scale: [1, 1.2, 1] } : {}}
-            className={`text-2xl transition-colors ${promise.achieved ? 'text-[#7a1212]' : 'text-[#7a1212]/10'}`}
-          >
-            {promise.achieved ? '♥' : '♡'}
-          </motion.span>
-        </div>
-      </div>
-
-      {/* ลายเส้นบรรทัดจางๆ ให้ฟีลกระดาษโน้ต */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.05] flex flex-col justify-evenly px-6 py-10">
-        {[...Array(4)].map((_, i) => <div key={i} className="border-b border-[#7a1212] w-full" />)}
-      </div>
-    </motion.div>
-  );
-}
-
-// --- 2. Component หลัก GoPlanSection (รับ props onUnlock เพื่อวาร์ป) ---
 export default function GoPlanSection({ onUnlock }: { onUnlock: () => void }) {
-  const [inputValue, setInputValue] = useState("");
-  const [promises, setPromises] = useState([
-    { id: 1, task: "พาไปดูซากุระที่ญี่ปุ่น", achieved: false },
-    { id: 2, task: "ซื้อบ้านที่มีสวนดอกไม้ให้เธอ", achieved: false },
-    { id: 3, task: "ไปกินหมูกระทะร้านโปรดให้พุงกาง", achieved: true },
-    { id: 4, task: "นั่งดูพระอาทิตย์ตกที่บรรทัดทอง", achieved: false },
-  ]);
+  const [openWish, setOpenWish] = useState<typeof WISHES[0] | null>(null);
+  // track ว่าหยิบอ่านไปแล้วกี่ใบ (เพื่อแสดง badge)
+  const [read, setRead] = useState<Set<number>>(new Set());
 
-  const toggleAchieved = (id: number) => {
-    setPromises(promises.map(p => p.id === id ? { ...p, achieved: !p.achieved } : p));
-  };
-
-  const addPromise = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
-    setPromises([{ id: Date.now(), task: inputValue, achieved: false }, ...promises]);
-    setInputValue("");
+  const handlePick = (wish: typeof WISHES[0]) => {
+    setOpenWish(wish);
+    setRead(prev => new Set([...prev, wish.id]));
   };
 
   return (
-    <section className="min-h-screen w-full bg-[#7a1212] p-6 md:p-20 overflow-x-hidden font-mono">
-      <div className="max-w-5xl mx-auto">
-        
-        {/* Header Section */}
-        <header className="mb-20 text-center text-[#fdfcf0]">
-          <motion.h1 
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            className="text-5xl md:text-8xl font-black italic uppercase tracking-tighter"
-          >
-            Future <br/> Notes
-          </motion.h1>
-          <p className="mt-4 text-[10px] tracking-[0.6em] opacity-40 uppercase font-sans">
-            Writing our dreams on paper
-          </p>
-        </header>
+    <section className="min-h-screen w-full bg-[#fce4ec] flex flex-col items-center font-sans overflow-x-hidden pb-20">
 
-        {/* --- Input Form --- */}
-        <form onSubmit={addPromise} className="mb-28 max-w-lg mx-auto relative group">
-          <motion.div 
-            whileFocus={{ scale: 1.02 }}
-            className="bg-[#fdfcf0] p-8 shadow-[15px_15px_0px_rgba(0,0,0,0.2)] rotate-[-1deg] relative z-10"
-          >
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-20 h-10 bg-white/40 backdrop-blur-[2px] z-10 border-x border-white/5" />
-            
-            <div className="flex flex-col gap-2">
-              <label className="text-[10px] uppercase tracking-[0.3em] text-[#7a1212]/40 font-bold mb-1">
-                New Promise:
-              </label>
-              <textarea 
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="ในอนาคตฉันจะพาเธอไป..."
-                rows={2}
-                className="bg-transparent border-none outline-none text-[#7a1212] text-xl md:text-2xl italic placeholder:opacity-20 resize-none font-black leading-tight"
-              />
-              <div className="w-full h-[2px] bg-[#7a1212]/10 mt-2" />
-              <div className="flex justify-end mt-4">
-                <button 
-                  type="submit"
-                  className="text-[#7a1212] font-black text-xs uppercase tracking-widest hover:underline transition-all"
-                >
-                  Confirm Promise →
-                </button>
-              </div>
-            </div>
-          </motion.div>
-          <div className="absolute inset-0 bg-[#fdfcf0]/10 -z-10 translate-x-2 translate-y-2 rotate-1" />
-        </form>
+      {/* Header */}
+      <header className="w-full text-center pt-14 pb-2 px-6">
+        <motion.h1
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-[#c2547a]"
+        >
+          Wish Jar
+        </motion.h1>
+        <p className="mt-2 text-[10px] tracking-[0.5em] text-[#e8789a]/60 uppercase">
+          our little dreams together
+        </p>
+        {/* อ่านไปแล้วกี่ใบ */}
+        <motion.p
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
+          className="mt-3 text-xs font-black text-[#e8789a]/70 uppercase tracking-widest"
+        >
+          หยิบอ่านแล้ว {read.size} / {WISHES.length} ใบ
+        </motion.p>
+      </header>
 
-        {/* --- List Section --- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 justify-items-center">
-          <AnimatePresence mode='popLayout'>
-            {promises.map((p, idx) => (
-              <PromiseNote 
-                key={p.id} 
-                promise={p} 
-                toggle={toggleAchieved} 
-                idx={idx} 
-              />
+      {/* โหลแก้ว */}
+      <div className="relative w-full max-w-xs px-4 mt-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          style={{ filter: 'drop-shadow(0 16px 40px rgba(232,120,154,0.28))' }}
+        >
+          <svg viewBox="0 0 300 390" className="w-full h-auto" style={{ overflow: 'visible' }}>
+            <defs>
+              {/* gradient ตัวโหล */}
+              <linearGradient id="jarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stopColor="#fce4ec" stopOpacity="0.85" />
+                <stop offset="45%"  stopColor="#fff8fb" stopOpacity="0.96" />
+                <stop offset="100%" stopColor="#f4a7be" stopOpacity="0.55" />
+              </linearGradient>
+              <linearGradient id="lidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"   stopColor="#f9c6d8" />
+                <stop offset="100%" stopColor="#e8789a" />
+              </linearGradient>
+              {/* clip ตัวโหล — กระดาษที่อยู่ข้างในจะถูกตัดให้อยู่ในโหล */}
+              <clipPath id="jarBody">
+                <path d="M 58,68 Q 46,92 42,132 L 36,308 Q 36,342 150,348 Q 264,342 264,308 L 258,132 Q 254,92 242,68 Z" />
+              </clipPath>
+              {/* เงาหมุด */}
+              <filter id="scrollShadow">
+                <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#c2547a" floodOpacity="0.25" />
+              </filter>
+            </defs>
+
+            {/* ===== ฝาโหล ===== */}
+            <rect x="72" y="30" width="156" height="42" rx="14" fill="url(#lidGrad)" />
+            <rect x="84" y="20" width="132" height="18" rx="9" fill="#f4a7be" />
+            {/* ลายริ้วฝา */}
+            {[96,112,128,144,160,176,192,208].map(x => (
+              <line key={x} x1={x} y1="22" x2={x} y2="38" stroke="#e8789a" strokeWidth="1.2" opacity="0.3" />
             ))}
-          </AnimatePresence>
-        </div>
+            {/* ปุ่มกลางฝา */}
+            <ellipse cx="150" cy="20" rx="18" ry="7" fill="#e8789a" opacity="0.5" />
 
-        {/* --- ปุ่มลับสำหรับวาร์ป (The Creative Bridge) อัปเกรดแล้ว --- */}
-        <div className="mt-40 mb-20 flex justify-center">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={onUnlock}
-            className="relative cursor-pointer group"
-          >
-            {/* 1. วงแหวนรัศมีกระจายออก (Pulsing Effect) เพื่อบอกว่ากดได้ */}
-            <motion.div
-              animate={{ scale: [1, 1.6], opacity: [0.6, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeOut" }}
-              className="absolute inset-0 bg-[#fdfcf0] rounded-full -z-10"
+            {/* ===== ตัวโหล (พื้นหลัง) ===== */}
+            <path
+              d="M 58,68 Q 46,92 42,132 L 36,308 Q 36,342 150,348 Q 264,342 264,308 L 258,132 Q 254,92 242,68 Z"
+              fill="url(#jarGrad)"
+              stroke="#f4a7be"
+              strokeWidth="2.5"
             />
 
-            {/* 2. ตัวตราประทับ (Wax Seal) */}
-            <div className="w-24 h-24 bg-[#5a0d0d] rounded-full shadow-[inset_0_0_15px_rgba(0,0,0,0.5),5px_10px_20px_rgba(0,0,0,0.3)] flex items-center justify-center relative border-2 border-[#7a1212]">
-              <div className="absolute inset-[-5px] rounded-full border-[6px] border-[#5a0d0d] opacity-80 blur-[1px]" />
-              <motion.span 
-                animate={{ scale: [1, 1.15, 1] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
-                className="text-[#fdfcf0] text-4xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
-              >
-                ♥
-              </motion.span>
-            </div>
+            {/* ===== กระดาษม้วนในโหล ===== */}
+            {WISHES.map((wish, i) => {
+              const pos = SCROLL_POSITIONS[i] || { x: 150, y: 200, r: 0 };
+              const isRead = read.has(wish.id);
+              return (
+                <g
+                  key={wish.id}
+                  clipPath="url(#jarBody)"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handlePick(wish)}
+                >
+                  <g transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r})`}>
+                    {/* ตัวกระดาษ */}
+                    <rect
+                      x="-16" y="-22" width="32" height="30" rx="3"
+                      fill={isRead ? "#f4a7be" : wish.color}
+                      stroke={isRead ? "#c2547a" : "#f4a7be"}
+                      strokeWidth="1.2"
+                      opacity={isRead ? 0.55 : 1}
+                      filter="url(#scrollShadow)"
+                    />
+                    {/* ม้วนบน */}
+                    <ellipse cx="0" cy="-22" rx="16" ry="5"
+                      fill={isRead ? "#f4a7be" : wish.color}
+                      stroke={isRead ? "#c2547a" : "#f4a7be"}
+                      strokeWidth="1.2" opacity={isRead ? 0.55 : 1}
+                    />
+                    {/* ม้วนล่าง */}
+                    <ellipse cx="0" cy="8" rx="16" ry="5"
+                      fill={isRead ? "#f4a7be" : wish.color}
+                      stroke={isRead ? "#c2547a" : "#f4a7be"}
+                      strokeWidth="1.2" opacity={isRead ? 0.55 : 1}
+                    />
+                    {/* ลายเส้นในกระดาษ */}
+                    <line x1="-10" y1="-12" x2="10" y2="-12" stroke="#e8789a" strokeWidth="0.8" opacity="0.35" />
+                    <line x1="-10" y1="-5"  x2="10" y2="-5"  stroke="#e8789a" strokeWidth="0.8" opacity="0.35" />
+                    <line x1="-10" y1="2"   x2="10" y2="2"   stroke="#e8789a" strokeWidth="0.8" opacity="0.35" />
+                    {/* icon กลาง */}
+                    <text y="-6" textAnchor="middle" fontSize="9" fill={isRead ? "#c2547a" : "#e8789a"} opacity={isRead ? 0.6 : 1}>
+                      {isRead ? "✓" : "♥"}
+                    </text>
+                  </g>
+                </g>
+              );
+            })}
 
-            {/* 3. ข้อความกำกับแบบเนียนๆ (Pulsing Text) */}
-            <motion.div 
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="absolute -bottom-14 left-1/2 -translate-x-1/2 w-max text-center"
+            {/* ===== แสงสะท้อนในโหล (วาดทับสุดท้าย) ===== */}
+            <path
+              d="M 66,82 Q 58,160 58,268"
+              fill="none" stroke="white"
+              strokeWidth="7" strokeLinecap="round" opacity="0.38"
+            />
+            <path
+              d="M 80,78 Q 74,140 74,230"
+              fill="none" stroke="white"
+              strokeWidth="3" strokeLinecap="round" opacity="0.22"
+            />
+          </svg>
+        </motion.div>
+
+        {/* hint */}
+        <motion.p
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ repeat: Infinity, duration: 2.5 }}
+          className="text-center mt-2 text-[10px] font-black uppercase tracking-[0.35em] text-[#e8789a]/60"
+        >
+        </motion.p>
+      </div>
+
+      {/* ===== Popup อ่านกระดาษ ===== */}
+      <AnimatePresence>
+        {openWish && (
+          <motion.div
+            key="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-[#fce4ec]/75 backdrop-blur-sm p-6"
+            onClick={() => setOpenWish(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.4, rotate: -12, opacity: 0 }}
+              animate={{ scale: 1, rotate: 0, opacity: 1 }}
+              exit={{ scale: 0.4, rotate: 12, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+              onClick={e => e.stopPropagation()}
+              className="relative bg-[#fff8fb] rounded-3xl px-8 pt-10 pb-8 max-w-xs w-full shadow-[0_20px_60px_rgba(232,120,154,0.32)] border border-[#f4a7be]/50"
             >
-              <p className="text-[11px] font-black uppercase tracking-[0.4em] text-[#fdfcf0] drop-shadow-lg">
-                Tap to claim surprise
+              {/* กระดาษม้วนใหญ่ด้านบน */}
+              <div className="flex justify-center -mt-16 mb-4">
+                <svg viewBox="0 0 90 90" className="w-24 h-24 drop-shadow-xl">
+                  <rect x="12" y="16" width="66" height="58" rx="4" fill={openWish.color} stroke="#f4a7be" strokeWidth="1.8" />
+                  <ellipse cx="45" cy="16" rx="33" ry="9"  fill={openWish.color} stroke="#f4a7be" strokeWidth="1.8" />
+                  <ellipse cx="45" cy="74" rx="33" ry="9"  fill={openWish.color} stroke="#f4a7be" strokeWidth="1.8" />
+                  <line x1="22" y1="34" x2="68" y2="34" stroke="#e8789a" strokeWidth="1" opacity="0.4" />
+                  <line x1="22" y1="44" x2="68" y2="44" stroke="#e8789a" strokeWidth="1" opacity="0.4" />
+                  <line x1="22" y1="54" x2="68" y2="54" stroke="#e8789a" strokeWidth="1" opacity="0.4" />
+                  <text x="45" y="50" textAnchor="middle" fontSize="18" fill="#e8789a">♥</text>
+                </svg>
+              </div>
+
+              {/* ป้ายเล็ก */}
+              <p className="text-center text-[9px] font-black uppercase tracking-[0.3em] text-[#e8789a]/50 mb-3">
+                ในอนาคตเราจะ...
               </p>
-              <div className="w-full h-[1.5px] bg-[#fdfcf0]/40 mt-1 shadow-sm" />
+
+              {/* ข้อความ */}
+              <p className="text-[#c2547a] text-xl font-black italic text-center leading-relaxed mb-8">
+                "{openWish.text}"
+              </p>
+
+              {/* ปุ่มปิด */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setOpenWish(null)}
+                className="w-full py-3.5 bg-[#e8789a] text-white font-black text-xs uppercase tracking-widest rounded-2xl hover:bg-[#c2547a] transition-colors shadow-md"
+              >
+                ♥ เก็บไว้ในใจแล้ว
+              </motion.button>
             </motion.div>
           </motion.div>
-        </div>
+        )}
+      </AnimatePresence>
 
+      {/* ===== ปุ่มวาร์ปหน้าต่อไป ===== */}
+      <div className="mt-6 flex justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={onUnlock}
+          className="relative cursor-pointer"
+        >
+          <motion.div
+            animate={{ scale: [1, 1.6], opacity: [0.5, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeOut" }}
+            className="absolute inset-0 bg-[#f4a7be] rounded-full -z-10"
+          />
+          <div className="w-24 h-24 bg-[#e8789a] rounded-full shadow-[0_10px_30px_rgba(232,120,154,0.4)] flex items-center justify-center border-2 border-[#c2547a]">
+            <motion.span
+              animate={{ scale: [1, 1.15, 1] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className="text-white text-4xl"
+            >
+              ♥
+            </motion.span>
+          </div>
+          <motion.div
+            animate={{ opacity: [0.4, 1, 0.4] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="absolute -bottom-14 left-1/2 -translate-x-1/2 w-max text-center"
+          >
+            <p className="text-[11px] font-black uppercase tracking-[0.4em] text-[#c2547a]">
+              Tap to claim surprise
+            </p>
+            <div className="w-full h-[1.5px] bg-[#e8789a]/40 mt-1" />
+          </motion.div>
+        </motion.div>
       </div>
+
     </section>
   );
 }
