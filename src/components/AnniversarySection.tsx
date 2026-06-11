@@ -8,7 +8,7 @@ interface AnniversarySectionProps {
 
 export default function AnniversaryPage({ onFinish }: AnniversarySectionProps) {
   const [isExploding, setIsExploding] = useState(false); 
-  const anniversaryDay = 26;
+  const anniversaryDay = 15; // 🎯 ย้ายหัวใจมาปักหมุดวันที่ 15 เรียบร้อยครับเพื่อนณฐ
   
   const handleBurst = () => {
     setIsExploding(true);
@@ -61,13 +61,17 @@ export default function AnniversaryPage({ onFinish }: AnniversarySectionProps) {
 
           <div className="w-[90%] bg-white/60 border border-[#f4a7be]/30 rounded-xl p-5 shadow-sm relative">
             <div className="flex justify-between items-center mb-6 px-1">
-              <span className="text-[#c2547a] font-black text-[14px] uppercase tracking-[0.2em]">April 2026</span>
+              {/* 🎯 อัปเดตเปลี่ยนชื่อเดือนเป็น June 2026 หวานเจี๊ยบ */}
+              <span className="text-[#c2547a] font-black text-[14px] uppercase tracking-[0.2em]">June 2026</span>
             </div>
             <div className="grid grid-cols-7 gap-y-4 text-center items-center">
               {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((day, index) => (
                 <span key={`h-${index}`} className="text-[9px] font-black text-[#e8789a]/50 tracking-tighter">{day}</span>
               ))}
-              {[null, null, null].map((_, index) => <div key={`e-${index}`} className="h-10" />)}
+              
+              {/* 🎯 June 2026 วันที่ 1 ตรงกับวันจันทร์ -> เปลี่ยนมาเว้นว่างแค่ 1 ช่อง (ช่อง SUN) เพื่อให้วันลงล็อกเป๊ะครับเกลอ */}
+              {[null].map((_, index) => <div key={`e-${index}`} className="h-10" />)}
+              
               {Array.from({ length: 30 }, (_, i) => i + 1).map(day => (
                 <div key={`d-${day}`} className="relative h-10 flex items-center justify-center">
                   {day === anniversaryDay ? (

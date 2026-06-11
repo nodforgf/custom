@@ -17,14 +17,12 @@ function PhotoCard({ photoUrl, idx, style, totalPhotos }: PhotoCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const messages = [
-    "รูปนี้ตอนที่เราจับมือกันครั้งแรก จำได้ไหม? ♥",
-    "ดอกกุหลาบช่อแรกที่ให้เธอ",
-    "ขอบคุณที่อยู่ข้างกันในวันที่เหนื่อยๆ นะ",
-    "รูปนี้ตลกดี คิดถึงตอนนั้นเลย",
-    "พากันทำอะไรเพี้ยนๆด้วยกัน สนุกจัง",
-    "รักแมวแต่รักเธอมากกว่า",
-    "ความทรงจำที่ดีที่สุด คือการที่มีเธออยู่ในนั้น",
-    "Happy Anniversary นะคะคนดี ♥"
+    "ฉลองปีใหม่ด้วยกันครั้งแรก",
+    "อันนี้น่ารักมากกก ไว้ไปเล่นกันอีกๆ",
+    "ดูคอนครั้งแรกด้วยกันสนุกมากกก",
+    "ทริปเชียงใหม่วิวสวยมาก ถ้าย้อนกับไปได้ชั้นอยากถ่ายรูปกับแกอีกเยอะๆ",
+    "ดอกไม้ช่อแรกที่เป็นแฟนกัน ก่อนนั้นไม่นับอิอิ ชอบทุกครั้งที่แกให้ดอกไม้ชั้น ดีใจที่สุด",
+    "yessssss 💗💗",
   ];
 
   return (
@@ -100,12 +98,12 @@ function PhotoCard({ photoUrl, idx, style, totalPhotos }: PhotoCardProps) {
 
 export default function GallerySection({ onNext }: GallerySectionProps) {
   const myPhotos = [
-    "/images/couple1.jpg",
-    "/images/couple2.jpg",
-    "/images/couple3.jpg",
-    "/images/couple4.jpg",
-    "/images/couple5.jpg",
-    "/images/couple6.jpg",
+    "/images/couple1.jpeg",
+    "/images/couple2.jpeg",
+    "/images/couple3.jpeg",
+    "/images/couple4.jpeg",
+    "/images/couple5.jpeg",
+    "/images/couple6.jpeg",
   ];
 
   const scatteredStyles = [

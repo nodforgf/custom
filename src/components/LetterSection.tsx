@@ -113,11 +113,10 @@ export default function LetterSection({ onNext }: { onNext: () => void }) {
                                 </div>
                                 <div className="px-7 py-6 text-[#c2547a] space-y-4">
                                     <h3 className="text-base font-black italic border-b border-[#e8789a]/20 pb-3">
-                                        ถึง... อ้วน
+                                        ถึง... แก
                                     </h3>
                                     <div className="text-xs leading-7 space-y-3 italic text-[#c2547a]/75">
-                                        <p>ขอบคุณนะที่อยู่ข้างกันมาตลอด เว็บนี้ตั้งใจทำขึ้นมาเพราะอยากรวมเรื่องราวของเราไว้ในที่เดียว...</p>
-                                        <p>ต่อจากนี้ไม่ว่าจะเป็นยังไง ก็อยากให้รู้ว่ารักมากนะ</p>
+                                        <p>เย้ๆครบรอบอีกแล้ว ก็ยังต้องบอกว่าขอบคุณมากๆที่เข้ามานะ ขอบคุณครอบครัวแกด้วยที่น่ารักกับชั้นมากๆ ยังมีอีกหลายเรื่องราวรอเราอยู่ข้างหน้า และชั้นก็ดีใจที่คนที่ได้เดินไปด้วยกันคือแก  รักแกจุ๊บๆๆๆๆๆ 💗💗💗</p>
                                     </div>
                                     <div className="text-right font-black italic text-sm pt-2 border-t border-[#e8789a]/10">
                                         — รักเสมอ

@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 
 const CARD_IMAGES = [
-    "/images/couple1.jpg",
-    "/images/couple2.jpg",
-    "/images/couple3.jpg",
-    "/images/couple4.jpg",
-    "/images/couple5.jpg",
-    "/images/couple6.jpg",
+    "/images/couple1.jpeg",
+    "/images/couple2.jpeg",
+    "/images/couple3.jpeg",
+    "/images/couple4.jpeg",
+    "/images/couple5.jpeg",
+    "/images/couple6.jpeg",
 ];
 
 export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => void, onFinish: () => void }) {
@@ -27,8 +27,8 @@ export default function GiftQuestSection({ onBack, onFinish }: { onBack: () => v
     const [isSpinning, setIsSpinning] = useState(false);
 
     const GIFTS = [
-        "พาไปกินบุฟเฟต์ 🥩", "ตามใจ 1 วัน ✨", "นวดไหล่ให้ 30 นาที 💆‍♀️", "ตั๋วหนัง 2 ที่นั่ง 🍿",
-        "จุ๊บเหม่ง 1 ที 😘", "ซื้อลิปสติกใหม่ 💄", "พาไปเที่ยวทะเล 🌊", "งดดื้อ 1 อาทิตย์ 🙏"
+        "บัตรตามใจ1วัน 🥩", "บัตรหายงอน 😾", "คูปองเลี้ยงข้าวฟรีทั้งวัน 🥩", "แพ็คเกจนวดฟรี ✨",
+        "คูปองเดตตามใจเธอ 🚗", "บัตรแฟนตัวยง(ตามกรี๊ดขอบสนาม) 💞", "บัตรจุ๊บทั้งวัน 😘", "บอกรักทั้งวัน 👩‍❤️‍💋‍👨"
     ];
 
     const fireConfetti = () => {
