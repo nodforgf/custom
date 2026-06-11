@@ -6,14 +6,14 @@ interface PhotoCardProps {
   photoUrl: string;
   idx: number;
   style: { top: string; left: string; rotate: number };
-  totalPhotos: number;
+  photoDate: string;
 }
 
 interface GallerySectionProps {
   onNext: () => void;
 }
 
-function PhotoCard({ photoUrl, idx, style, totalPhotos }: PhotoCardProps) {
+function PhotoCard({ photoUrl, idx, style, photoDate }: PhotoCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const messages = [
@@ -60,8 +60,8 @@ function PhotoCard({ photoUrl, idx, style, totalPhotos }: PhotoCardProps) {
           </div>
 
           <div className="absolute -bottom-9 left-0 w-full text-center">
-            <span className="text-[#e8789a]/40 text-[10px] font-black tracking-widest uppercase pointer-events-none">
-              ♥ {idx + 1} / {totalPhotos} ♥
+            <span className="text-[#e8789a] text-[10px] font-black tracking-widest uppercase pointer-events-none">
+              ♥ {photoDate} ♥
             </span>
           </div>
 
@@ -104,6 +104,16 @@ export default function GallerySection({ onNext }: GallerySectionProps) {
     "/images/couple4.jpeg",
     "/images/couple5.jpeg",
     "/images/couple6.jpeg",
+  ];
+
+  // 🎯 ปรับอัปเดตวันที่ 1-6 ตรงตามบรีฟลูกค้า (แฟน) แป๊ะ ๆ ห้ามแตะอย่างอื่นเรียบร้อยครับเกลอ!
+  const photoDates = [
+    "01/01/69", // 1. ปีใหม่ด้วยกันครั้งแรก
+    "14/02/69", // 2. วาเลนไทน์
+    "15/11/68", // 3. ดูคอนเสิร์ตด้วยกัน
+    "11/12/68", // 4. ทริปเชียงใหม่
+    "03/06/69", // 5. ดอกไม้ช่อแรก
+    "15/02/69", // 6. Yessss!
   ];
 
   const scatteredStyles = [
@@ -162,7 +172,7 @@ export default function GallerySection({ onNext }: GallerySectionProps) {
                 photoUrl={p}
                 idx={idx}
                 style={style}
-                totalPhotos={myPhotos.length}
+                photoDate={photoDates[idx % photoDates.length]}
               />
             );
           })}
