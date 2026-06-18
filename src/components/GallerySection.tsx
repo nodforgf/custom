@@ -80,15 +80,17 @@ function PhotoCard({ photoUrl, idx, style, photoDate }: PhotoCardProps) {
 
         {/* หน้าหลัง (Back): ข้อความ */}
         <div
-          className="absolute inset-3 bottom-12 flex flex-col items-center justify-center p-6 bg-[#fff8fb] rounded-sm"
+          className="absolute inset-3 bottom-12 flex flex-col items-center justify-center p-3 bg-[#fff8fb] rounded-sm overflow-hidden"
           style={{ backfaceVisibility: "hidden" as const, WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
-          <span className="text-[#e8789a] mb-2 text-xl">♥</span>
-          <p className="text-[#c2547a] text-[13px] font-bold text-center leading-relaxed italic">
-            "{messages[idx % messages.length]}"
-          </p>
-          <div className="w-8 h-[1px] bg-[#e8789a]/20 my-4" />
-          <span className="text-[#c2547a]/40 text-[9px] uppercase tracking-tighter">
+          <span className="text-[#e8789a] mb-1 text-base flex-shrink-0">♥</span>
+          <div className="overflow-y-auto flex-1 w-full flex items-center justify-center">
+            <p className="text-[#c2547a] text-[10px] font-bold text-center leading-snug italic break-words">
+              "{messages[idx % messages.length]}"
+            </p>
+          </div>
+          <div className="w-8 h-[1px] bg-[#e8789a]/20 my-1 flex-shrink-0" />
+          <span className="text-[#c2547a]/40 text-[9px] uppercase tracking-tighter flex-shrink-0">
             Memory #{idx + 1}
           </span>
           <span className="absolute bottom-2 text-[#e8789a]/30 text-[8px]">Tap to flip back</span>
