@@ -4,17 +4,16 @@ import { useState } from 'react';
 
 // --- ความปรารถนา preset ทั้งหมด ---
 const WISHES = [
-  { id: 1,  text: "เราจะไปเที่ยวต่างประเทศด้วยกันครั้งแรก",                color: "#ffd6e7" },
-  { id: 2,  text: "เราจะได้ลองทำอาหารกินด้วยกันอีกหลายเมนู", color: "#fce4ec" },
-  { id: 3,  text: "เราจะได้วิ่งด้วยกันอีกหลายกิโลเมตร",        color: "#fff0f8" },
-  { id: 4,  text: "เราจะได้เก็บเงินด้วยกันเยอะๆ และสร้างอนาคตด้วยกัน",           color: "#ffd6e7" },
-  { id: 5,  text: "เราจะได้ลองทำ content อะไรใหม่ๆ เรียนรู้สิ่งใหม่ๆไปด้วยกัน ",          color: "#fce4ec" },
-  { id: 6,  text: "เราจะมีรูปคู่น่ารักๆเพิ่มขึ้นอีกเป็นพันเป็นหมื่นรูป",  color: "#fff0f8" },
-  { id: 7,  text: "เราจะคอยเป็นกำลังใจให้กันในทุกช่วงของชีวิต",          color: "#ffd6e7" },
-  { id: 8,  text: "เราจะเติบโตและมีความสุขไปด้วยกันในทุกๆ วัน",         color: "#fce4ec" },
-  { id: 9,  text: "เราจะได้ฉลองอีกหลายเทศกาลและวันสำคัญไปด้วยกัน ",            color: "#fff0f8" },
-  { id: 10, text: "เราจะได้นอนดูหนังด้วยกันอีกหลายๆเรื่อง",            color: "#ffd6e7" },
-  { id: 11, text: "เราจะได้ตื่นและนอนหลับพร้อมกันทุกๆคืน",            color: "#ffd6e7" },
+  { id: 1,  text: "ถ่ายโฟโต้บูธด้วยกันอีกเยอะๆ",                color: "#ffd6e7" },
+  { id: 2,  text: "ไปเที่ยวด้วยกันหลายๆที่", color: "#fce4ec" },
+  { id: 3,  text: "ไปกินปิ่นโตด้วยกันอีกนานๆ",        color: "#fff0f8" },
+  { id: 4,  text: "เล่นเกมส์ด้วยกันบ่อยๆ",           color: "#ffd6e7" },
+  { id: 5,  text: "ดูหนังด้วยกันอีกหลายๆเรื่อง",          color: "#fce4ec" },
+  { id: 6,  text: "มีบ้านด้วยกันที่เค้าเลี้ยงหมา เธอเลี้ยงแมว",  color: "#fff0f8" },
+  { id: 7,  text: "ไปต่างจังหวัด,ต่างประเทศด้วยกัน",          color: "#ffd6e7" },
+  { id: 8,  text: "ถ่ายรูปรับปริญญาด้วยกัน",         color: "#fce4ec" },
+  { id: 9,  text: "ทำอาหารด้วยกัน",            color: "#fff0f8" },
+  { id: 10, text: "แต่งงานและมีลูกผู้หญิงน่ารักๆ",            color: "#ffd6e7" },
 ];
 
 // ตำแหน่งกระดาษในโหล (x, y, rotate) — อยู่ใน viewBox 300x360
@@ -28,8 +27,7 @@ const SCROLL_POSITIONS = [
   { x: 88,  y: 255, r: -10 },
   { x: 155, y: 248, r:   8 },
   { x: 222, y: 258, r: -16 },
-  { x: 190, y: 310, r:   6 },
-  { x: 120, y: 310, r: -17 },
+  { x: 155, y: 310, r:   -8 },
 ];
 
 export default function GoPlanSection({ onUnlock }: { onUnlock: () => void }) {
@@ -226,7 +224,7 @@ export default function GoPlanSection({ onUnlock }: { onUnlock: () => void }) {
               </p>
 
               {/* ข้อความ */}
-              <p className="text-[#c2547a] text-xl font-black italic text-center leading-relaxed mb-8">
+              <p className="text-[#c2547a] text-lg font-black italic text-center leading-relaxed mb-8 break-words hyphens-auto">
                 "{openWish.text}"
               </p>
 

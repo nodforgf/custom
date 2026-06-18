@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
+
 interface PhotoCardProps {
   photoUrl: string;
   idx: number;
@@ -17,13 +18,13 @@ function PhotoCard({ photoUrl, idx, style, photoDate }: PhotoCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const messages = [
-    "ฉลองปีใหม่ด้วยกันครั้งแรก",
-    "อันนี้น่ารักมากกก ไว้ไปเล่นกันอีกๆ",
-    "ดูคอนครั้งแรกด้วยกันสนุกมากกก",
-    "ทริปเชียงใหม่วิวสวยมาก ถ้าย้อนกับไปได้ชั้นอยากถ่ายรูปกับแกอีกเยอะๆ",
-    "ดอกไม้ช่อแรกที่เป็นแฟนกัน ก่อนนั้นไม่นับอิอิ ชอบทุกครั้งที่แกให้ดอกไม้ชั้น ดีใจที่สุด",
-    "yessssss 💗💗",
-  ];
+  "จำได้ไหมของขวัญชิ้นแรกที่เธอซื้อให้เค้าตอน Christmas เค้าชอบมากๆ แต่ไม่กล้าใช้กลัวน้องลอกง่ะ", // idx 0 (Memory #1)
+  "อันนี้ตอนวันปีใหม่และวันแรกที่ได้อยู่ด้วยกัน เค้ามีความสุขมากที่ได้อยู่ข้ามปีไปกับเธอ", // idx 1 (Memory #2) -> แก้ไขให้ตรงตามภาพของคุณ
+  "อันนี้ของขวัญวันเกิดเค้า ดอกไม้ช่อแรกที่เธอให้ สวยมากๆ แถมมีแต่ของที่เค้าชอบโดยเฉพาะการ์ดที่เธอทำให้ ขอบคุณมากๆนะ",     // idx 2 (Memory #3) -> แก้ไขให้ตรงตามภาพของคุณ
+  "ข้างๆคือของขวัญวันวาเลนไทน์ แต่ตรงกลางอันนี้ทำเค้าตกใจมาก เพราะไม่คิดว่าเธอจะขอเป็นแฟนตอนนั้น ขอบคุณที่เธอเลือกเค้านะ",
+  "ส่วนอันนี้เธอรู้ว่าเค้าอยากได้มากก เธอก็ไปตามหาซื้อมาให้จนได้ ทุกวันนี้เค้าใช้มันคุ้มสุดๆ",
+  "สุดท้ายอันนี้ เซอร์ไพรส์เพราะเธอคงไม่รู้ว่าโดนเค้าแอบถ่าย ไม่รู้จำได้ไหมมันคือวันที่เค้าพาเธอไปยื่นเรื่องจบ อิอิ<3",
+];
 
   return (
     <motion.div
@@ -45,18 +46,19 @@ function PhotoCard({ photoUrl, idx, style, photoDate }: PhotoCardProps) {
     >
       <motion.div
         className="relative w-full h-full bg-[#fff8fb] p-3 pb-12 shadow-[0_25px_50px_rgba(232,120,154,0.3)] border border-[#f4a7be]/20 rounded-sm"
-        style={{ transformStyle: "preserve-3d" }}
+        style={{ transformStyle: "preserve-3d" as const, WebkitTransformStyle: "preserve-3d" }}
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.8, ease: "easeInOut" }}
       >
         {/* หน้าแรก (Front): รูปถ่าย */}
-        <div className="absolute inset-3 bottom-12" style={{ backfaceVisibility: "hidden" }}>
+        <div className="absolute inset-3 bottom-12" style={{ backfaceVisibility: "hidden" as const, WebkitBackfaceVisibility: "hidden" }}>
           {idx < 2 && (
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-16 h-8 bg-[#f4a7be]/20 backdrop-blur-[2px] rotate-[-5deg] border-x border-[#f4a7be]/10 z-20" />
           )}
 
           <div className="relative w-full h-full bg-[#fce4ec] overflow-hidden rounded-sm pointer-events-none">
-            <img src={photoUrl} className="w-full h-full object-cover" alt="Memory" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={photoUrl} className="w-full h-full object-cover" alt="Memory" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
           </div>
 
           <div className="absolute -bottom-9 left-0 w-full text-center">
@@ -79,7 +81,7 @@ function PhotoCard({ photoUrl, idx, style, photoDate }: PhotoCardProps) {
         {/* หน้าหลัง (Back): ข้อความ */}
         <div
           className="absolute inset-3 bottom-12 flex flex-col items-center justify-center p-6 bg-[#fff8fb] rounded-sm"
-          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+          style={{ backfaceVisibility: "hidden" as const, WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
         >
           <span className="text-[#e8789a] mb-2 text-xl">♥</span>
           <p className="text-[#c2547a] text-[13px] font-bold text-center leading-relaxed italic">
@@ -98,22 +100,22 @@ function PhotoCard({ photoUrl, idx, style, photoDate }: PhotoCardProps) {
 
 export default function GallerySection({ onNext }: GallerySectionProps) {
   const myPhotos = [
-    "/images/couple1.jpeg",
-    "/images/couple2.jpeg",
-    "/images/couple3.jpeg",
-    "/images/couple4.jpeg",
-    "/images/couple5.jpeg",
-    "/images/couple6.jpeg",
+    "/images/1.jpeg",
+    "/images/2.png",
+    "/images/3.jpeg",
+    "/images/4.jpeg",
+    "/images/5.jpeg",
+    "/images/6.png",
   ];
 
   // 🎯 ปรับอัปเดตวันที่ 1-6 ตรงตามบรีฟลูกค้า (แฟน) แป๊ะ ๆ ห้ามแตะอย่างอื่นเรียบร้อยครับเกลอ!
   const photoDates = [
-    "01/01/69", // 1. ปีใหม่ด้วยกันครั้งแรก
-    "14/02/69", // 2. วาเลนไทน์
-    "15/11/68", // 3. ดูคอนเสิร์ตด้วยกัน
-    "11/12/68", // 4. ทริปเชียงใหม่
-    "03/06/69", // 5. ดอกไม้ช่อแรก
-    "15/02/69", // 6. Yessss!
+    "1/6", 
+    "2/6", 
+    "3/6", 
+    "4/6", 
+    "5/6",
+    "6/6",
   ];
 
   const scatteredStyles = [
